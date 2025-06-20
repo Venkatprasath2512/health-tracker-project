@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Health & Fitness Tracker</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-image: url('https://images.unsplash.com/photo-1554284126-aa88f22d8b74');
+      background-size: cover;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      background-position: center;
+      color: red;
+    }
+    .card {
+      margin-bottom: 20px;
+      background-color: rgba(255, 255, 255, 0.9);
+      color: #000;
+    }
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .auth-only {
+      display: none;
+    }
+    .navbar-nav.ms-auto {
+      margin-left: auto;
+    }
+    #progressList, #goalsList {
+      white-space: pre-wrap;
+    }
+    .calendar {
+      display: flex;
+      flex-direction: column;
+    }
+    .calendar-entry {
+      border-bottom: 1px solid #ccc;
+      padding: 10px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Fitness Tracker</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto auth-only" id="navMenus">
+          <li class="nav-item">
+            <a class="nav-link" href="#trackerSection">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#progressCard">Progress</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#goalsCard">Goals</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Settings</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Welcome, <span id="navUsername">Guest</span></a>
+          </li>
+          <li class="nav-item d-none" id="logoutNav">
+            <a class="nav-link" href="#" onclick="logout()">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container py-4">
+    <h2 class="text-center mb-4">Health & Fitness Tracker</h2>
+
+    <!-- Login Section -->
+    <div class="card" id="loginCard">
+      <div class="card-header">Login</div>
+      <div class="card-body text-end">
+        <form id="loginForm">
+          <div class="text-start">
+            <div class="mb-3">
+              <label for="username" class="form-label">Username</label>
+              <input type="text" class="form-control" id="username" required>
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input type="password" class="form-control" id="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+          </div>
+      
+        </form>
+      </div>
+    </div>
+
+    <!-- Tracker Section -->
+    <div id="trackerSection" style="display: none;">
+      <form id="trackerForm">
+        <div class="row">
+          <!-- Health Metrics -->
+          <div class="col-md-4">
+            <div class="card">
+              <div class="card-header">Date</div>
+              <div class="card-body">
+                <input type="date" class="form-control" id="trackDate" required />
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">Sleep</div>
+              <div class="card-body"><input type="number" class="form-control" id="sleep" placeholder="Hours of sleep" required /></div>
+            </div>
+            <div class="card">
+              <div class="card-header">Heart Rate</div>
+              <div class="card-body"><input type="number" class="form-control" id="heartRate" placeholder="BPM" required /></div>
+            </div>
+            <div class="card">
+              <div class="card-header">Oxygen Level</div>
+              <div class="card-body"><input type="number" class="form-control" id="oxygen" placeholder="%" required /></div>
+            </div>
+            <div class="card">
+              <div class="card-header">BMI</div>
+              <div class="card-body"><input type="number" class="form-control" id="bmi" placeholder="BMI Value" required /></div>
+            </div>
+          </div>
+
+          <!-- Fitness Activities -->
+          <div class="col-md-8">
+            <div class="card">
+              <div class="card-header">Walking</div>
+              <div class="card-body">
+                <input type="text" class="form-control mb-2" id="walkComplete" placeholder="Completed steps" required>
+                <input type="text" class="form-control" id="walkIncomplete" placeholder="Incomplete steps" required>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">Running</div>
+              <div class="card-body">
+                <input type="text" class="form-control mb-2" id="runComplete" placeholder="Completed distance" required>
+                <input type="text" class="form-control" id="runIncomplete" placeholder="Incomplete distance" required>
+              </div>
+            </div>
+            <div class="text-end">
+              <button type="submit" class="btn btn-success">Submit Tracking</button>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <!-- Progress Section -->
+      <div class="card mt-4" id="progressCard">
+        <div class="card-header">Progress</div>
+        <div class="card-body calendar" id="progressList">
+          No progress data yet.
+        </div>
+      </div>
+
+      <!-- Goals Section -->
+      <div class="card mt-3" id="goalsCard">
+        <div class="card-header">Goals</div>
+        <div class="card-body" id="goalsList">
+          No goals data yet.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const progressList = document.getElementById('progressList');
+
+    function logout() {
+      document.getElementById('trackerSection').style.display = 'none';
+      document.getElementById('loginCard').style.display = 'block';
+      document.getElementById('navUsername').textContent = 'Guest';
+      document.getElementById('logoutNav').classList.add('d-none');
+      document.getElementById('navMenus').style.display = 'none';
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      if (username === 'user' && password === 'pass') {
+        document.getElementById('trackerSection').style.display = 'block';
+        document.getElementById('loginCard').style.display = 'none';
+        document.getElementById('navUsername').textContent = username;
+        document.getElementById('logoutNav').classList.remove('d-none');
+        document.getElementById('navMenus').style.display = 'flex';
+      } else {
+        alert('Invalid login details');
+      }
+    });
+
+    document.getElementById('trackerForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const date = document.getElementById('trackDate').value;
+      const sleep = document.getElementById('sleep').value;
+      const heartRate = document.getElementById('heartRate').value;
+      const oxygen = document.getElementById('oxygen').value;
+      const bmi = document.getElementById('bmi').value;
+      const walkComplete = document.getElementById('walkComplete').value;
+      const walkIncomplete = document.getElementById('walkIncomplete').value;
+      const runComplete = document.getElementById('runComplete').value;
+      const runIncomplete = document.getElementById('runIncomplete').value;
+
+      const progressData = `Sleep: ${sleep} hrs | HR: ${heartRate} BPM | O2: ${oxygen}% | BMI: ${bmi}`;
+      const goalsData = `Walking - Done: ${walkComplete}, Missed: ${walkIncomplete} | Running - Done: ${runComplete}, Missed: ${runIncomplete}`;
+
+      const entry = document.createElement('div');
+      entry.className = 'calendar-entry';
+      entry.innerHTML = `<strong>${date}</strong><br>${progressData}`;
+      progressList.appendChild(entry);
+
+      document.getElementById('goalsList').textContent = goalsData;
+
+      alert('Tracking data submitted for ' + date);
+      document.getElementById('trackerForm').reset();
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
